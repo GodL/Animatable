@@ -88,7 +88,7 @@ extension Animatable where Value: UIView {
 
 extension Animatable where Value: CALayer {
     public func startAnimation() {
-        value?.add(animation.animation, forKey: projectedValue.animationKey)
+        value?.add(animation.animation, forKey: animation.animationKey)
     }
     
     public func stopAnimation() {
