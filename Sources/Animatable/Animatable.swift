@@ -49,9 +49,14 @@ extension AnimationGroup {
 
 @propertyWrapper
 public struct Animatable<A: AnimatedType,Value> {
+    
     let animation: A
     
     var value: Value?
+    
+    public var projectedValue: Self {
+        self
+    }
     
     public var wrappedValue: Value {
         set {
@@ -67,7 +72,31 @@ public struct Animatable<A: AnimatedType,Value> {
     }
 }
 
-class View: UIView {
-    @Animatable(AnimationGroup(animations: [])) var animatedView: UIView
+extension Animatable where Value: UIView {
+    public func startAnimation() {
+        value?.layer.add(animation.animation, forKey: animation.animationKey)
+    }
     
+    public func stopAnimation() {
+        guard let key = animation.animationKey else {
+            value?.layer.removeAllAnimations()
+            return
+        }
+        value?.layer.removeAnimation(forKey: key)
+    }
 }
+
+extension Animatable where Value: CALayer {
+    public func startAnimation() {
+        value?.add(animation.animation, forKey: projectedValue.animationKey)
+    }
+    
+    public func stopAnimation() {
+        guard let key = animation.animationKey else {
+            value?.removeAllAnimations()
+            return
+        }
+        value?.removeAnimation(forKey: key)
+    }
+}
+
