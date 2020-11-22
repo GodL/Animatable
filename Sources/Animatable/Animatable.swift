@@ -63,11 +63,19 @@ public struct Animatable<A: AnimatedType,Value> {
             self.value = newValue
         }
         get {
-            value!
+            guard let value = self.value else {
+                fatalError("not initialized")
+            }
+            return value
         }
     }
     
     public init(_ animation: A) {
+        self.animation = animation
+    }
+    
+    public init(wrappedValue: Value, animated animation: A) {
+        self.value = wrappedValue
         self.animation = animation
     }
 }
@@ -99,4 +107,3 @@ extension Animatable where Value: CALayer {
         value?.removeAnimation(forKey: key)
     }
 }
-
