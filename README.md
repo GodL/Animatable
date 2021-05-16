@@ -4,7 +4,7 @@
 
 ## At a Glance
 
-Initialize scale animation.
+Initialize animations.
 
 ```swift
     enum Animations {
