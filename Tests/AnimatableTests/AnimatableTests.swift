@@ -1,7 +1,10 @@
 import XCTest
+import UIKit
 @testable import Animatable
 
+
 final class AnimatableTests: XCTestCase {
+
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct

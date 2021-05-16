@@ -53,7 +53,7 @@ You can use projectedValue $ to startAnimation and stopAnimation
     let package = Package(
       name: "MyAwesomeApp",
       dependencies: [
-        .Package(url: "https://github.com/GodL/Animatable.git", majorVersion: 1.0.3),
+        .Package(url: "https://github.com/GodL/Animatable.git", majorVersion: 1.0.4),
       ],
       targets: [
           .target(

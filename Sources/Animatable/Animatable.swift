@@ -19,6 +19,7 @@ public struct AnimationGroup: AnimatedType {
     public var animation: CAAnimation {
         let group = CAAnimationGroup()
         group.animations = self.animations.map(\.animation)
+        group.duration = group.animations?.first?.duration ?? 0
         return group
     }
 }
@@ -51,59 +52,52 @@ extension AnimationGroup {
 public struct Animatable<A: AnimatedType,Value> {
     
     let animation: A
-    
-    var value: Value?
+        
+    var configure: ((CAAnimation) -> Void)?
     
     public var projectedValue: Self {
         self
     }
     
-    public var wrappedValue: Value {
-        set {
-            self.value = newValue
-        }
-        get {
-            guard let value = self.value else {
-                fatalError("not initialized")
-            }
-            return value
-        }
-    }
+    public var wrappedValue: Value
     
-    public init(_ animation: A) {
+    public init(wrappedValue: Value, animated animation: A, configure: ((CAAnimation) -> Void)? = nil) {
+        self.wrappedValue = wrappedValue
         self.animation = animation
-    }
-    
-    public init(wrappedValue: Value, animated animation: A) {
-        self.value = wrappedValue
-        self.animation = animation
+        self.configure = configure
     }
 }
 
 extension Animatable where Value: UIView {
     public func startAnimation() {
-        value?.layer.add(animation.animation, forKey: animation.animationKey)
+        let key = animation.animationKey
+        let animation = animation.animation
+        configure?(animation)
+        wrappedValue.layer.add(animation, forKey: key)
     }
     
     public func stopAnimation() {
         guard let key = animation.animationKey else {
-            value?.layer.removeAllAnimations()
+            wrappedValue.layer.removeAllAnimations()
             return
         }
-        value?.layer.removeAnimation(forKey: key)
+        wrappedValue.layer.removeAnimation(forKey: key)
     }
 }
 
 extension Animatable where Value: CALayer {
     public func startAnimation() {
-        value?.add(animation.animation, forKey: animation.animationKey)
+        let key = animation.animationKey
+        let animation = animation.animation
+        configure?(animation)
+        wrappedValue.add(animation, forKey: key)
     }
     
     public func stopAnimation() {
         guard let key = animation.animationKey else {
-            value?.removeAllAnimations()
+            wrappedValue.removeAllAnimations()
             return
         }
-        value?.removeAnimation(forKey: key)
+        wrappedValue.removeAnimation(forKey: key)
     }
 }
