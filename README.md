@@ -7,14 +7,25 @@
 Initialize scale animation.
 
 ```swift
-    struct ScaleAnimation: AnimatedType {
-        var animation: CAAnimation {
-        let ani = CABasicAnimation(keyPath: "transform.scale")
-        ani.duration = 0.3
-        ani.toValue = 0.1
-        return ani
+    enum Animations {
+        struct TranslationAnimation: AnimatedType {
+            var animation: CAAnimation {
+                let animation = CABasicAnimation(keyPath: "transform.translation.x")
+                animation.duration = 2
+                animation.toValue = 200
+                return animation
+            }
         }
-    }
+
+        struct ScaleAnimation: AnimatedType {
+            var animation: CAAnimation {
+                let animation = CABasicAnimation(keyPath: "transform.scale")
+                animation.duration = 2
+                animation.toValue = 2
+                return animation
+                }
+            }
+        }
 ```
 Use scale animation with PropertyWrapper
 
@@ -75,7 +86,7 @@ dependencies: ["Animatable"])
 - **Using [Cococpods]**:
 
 ``` ruby
-pod 'GLResponderChain', '~> 1.0.6'
+pod 'Animatable', '~> 1.0.6'
 ```
 
 ## License
