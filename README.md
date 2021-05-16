@@ -19,24 +19,33 @@ Initialize scale animation.
 Use scale animation with PropertyWrapper
 
 ``` swift
-    class MyView: UIView {
-        @Animatable(ScaleAnimation()) var scaleView: UIView
+    @Animatable(animated: Animations.TranslationAnimation(), configure: {
+        if isRepeat {
+            $0.autoreverses = true
+            $0.repeatCount = 100
+            }
+    })
+    var translationView: UILabel = UILabel()
+
+    @Animatable(animated: Animations.ScaleAnimation(), configure: {
+        if isRepeat {
+            $0.autoreverses = true
+            $0.repeatCount = 100
+            }
+    })
+    var scaleView: UILabel = UILabel()
+
+    @Animatable(animated: AnimationGroup(Animations.TranslationAnimation(), Animations.ScaleAnimation()), configure: {
+        if isRepeat {
+            $0.autoreverses = true
+            $0.repeatCount = 100
+            }
+        })
+    var combineView: UILabel = UILabel()
     
-        override init(frame: CGRect) {
-            scaleView = UIView(frame: frame)
-            super.init(frame: frame)
-        
-            self.addSubview(scaleView)
-        }
-    
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    
-        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            $scaleView.startAnimation()
-        }
-}
+    $translationView.startAnimation()
+    $scaleView.startAnimation()
+    $combineView.startAnimation()
 ```
 
 ## Tips
@@ -47,22 +56,28 @@ You can use projectedValue $ to startAnimation and stopAnimation
 
 - **Using [Swift Package Manager](https://swift.org/package-manager)**:
 
-    ```swift
-    import PackageDescription
+```swift
+import PackageDescription
 
-    let package = Package(
-      name: "MyAwesomeApp",
-      dependencies: [
-        .Package(url: "https://github.com/GodL/Animatable.git", majorVersion: 1.0.4),
-      ],
-      targets: [
-          .target(
-              name: "MyAwesomeApp",
-              dependencies: ["Animatable"])
-      ]
-    )
-    ```
-    
-    ## License
+let package = Package(
+name: "MyAwesomeApp",
+dependencies: [
+.Package(url: "https://github.com/GodL/Animatable.git", majorVersion: 1.0.6),
+],
+targets: [
+.target(
+name: "MyAwesomeApp",
+dependencies: ["Animatable"])
+]
+)
+```
 
-    **Animatable** is under MIT license. See the [LICENSE](LICENSE) file for more info.
+- **Using [Cococpods]**:
+
+``` ruby
+pod 'GLResponderChain', '~> 1.0.6'
+```
+
+## License
+
+**Animatable** is under MIT license. See the [LICENSE](LICENSE) file for more info.
