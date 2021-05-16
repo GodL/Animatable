@@ -27,7 +27,7 @@ Initialize animations.
             }
         }
 ```
-Use scale animation with PropertyWrapper
+Use animations with PropertyWrapper
 
 ``` swift
     @Animatable(animated: Animations.TranslationAnimation(), configure: {
